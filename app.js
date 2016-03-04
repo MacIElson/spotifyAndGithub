@@ -6,6 +6,7 @@ var express = require('express');
 var indexRoute = require('./routes/index');
 var mongoose = require('mongoose');
 var favicon = require('serve-favicon');
+var SpotifyWebApi = require('spotify-web-api-node');
 
 var app = express();
 
