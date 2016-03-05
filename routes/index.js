@@ -10,7 +10,7 @@ var gitauth = require('../authKeys.js');
 var querystring = require('querystring');
 var request = require('request');
 
-var githubthing = require('../github.js');
+var Github = require('github-api');
 
 var router = express.Router();
 var authroutes = {};
@@ -28,6 +28,7 @@ var generateRandomString = function(length) {
 };
 
 var stateKey = 'github_auth_state';
+var apiKey = 'github_auth_api';
 
 authroutes.getHome = function(req, res) {
 	res.sendFile(path.resolve('public/html/main.html'));
@@ -82,25 +83,57 @@ authroutes.getGithubCallback = function(req, res) {
   request.post(authOptions, function(error, response, body) {
     if (!error && response.statusCode === 200) {
 
-      var access_token = body.access_token,
-          refresh_token = body.refresh_token;
+      var access_token = body.access_token;  
 
-      console.log('Access token: ' + access_token);
-      console.log('Refresh token: ' + refresh_token);
-    }
+    console.log('Access token: ' + access_token);
 
-    // githubthing.token = access_token;
-    // console.log('Github thing token: ' + githubthing.token)
+    //WHY NO WORK???
+    var githubapi = new Github({
+      token: access_token,
+      auth: "oauth"
+    });
 
-    // var user = githubthing.getUser();
-    // console.log('User: ' + user);
-    // res.send(user);
+    var user = githubapi.getUser();
+    user.show(null, function(err, user) {
+      if(err) {console.log(err)}
+      console.log(user)
+    })
+    
 
-    res.redirect('https://api.github.com/user?' +
+    //Manual redirecting works...
+    // res.redirect('https://api.github.com/user?' +
+    //   querystring.stringify({
+    //     access_token: access_token,
+    // }));
+
+    //What about this? So we can make a request...
+  //   options = {
+  //     url: 'https://api.github.com/user',
+  //     headers: { 'User-Agent': 'skumarasena' },
+  //     access_token: access_token,
+  //   }
+
+  //   request.get(options, function(req, res, body) {
+  //     console.log(body)
+  //     console.log(res)
+  //   })
+  // }
+
+    res.redirect('/#' +
       querystring.stringify({
         access_token: access_token,
-    }));
+      }));
 
+
+  } else {
+    console.log('Authentication error!');
+    res.redirect('/#' +
+      querystring.stringify({
+        error: 'invalid_token'
+      }));
+  }
+
+    
   });
 
 

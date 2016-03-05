@@ -33,13 +33,13 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use('/node_modules', express.static(__dirname + '/node_modules'));
 
 
-app.get('*', function(req, res, next) {
-    req.github = github;
-    console.log(req.github);
-    // var repo = github.getRepo('skumarasena', 'blargh');
-    // console.log(repo);
-    next();
-})
+// app.get('*', function(req, res, next) {
+//     req.github = github;
+//     console.log(req.github);
+//     // var repo = github.getRepo('skumarasena', 'blargh');
+//     // console.log(repo);
+//     next();
+// })
 app.get('/', indexRoute.getHome);
 app.get('/auth/github', indexRoute.getGithubAuth);
 app.get('/auth/github/callback', indexRoute.getGithubCallback)
