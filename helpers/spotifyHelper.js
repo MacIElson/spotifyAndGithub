@@ -2,17 +2,11 @@ var authKeys = require('../authKeys.js');
 var SpotifyWebApi = require('spotify-web-api-node');
 
 //user is a user object and done it the callback function
-var getNewAccessTokenIfExpired = function(user, done) {
+var getNewAccessTokenIfExpired = function(spotifyApiInstance, user, done) {
 	console.log("user in getNewAccessTokenIfExpired")
 	console.log(user)
 	if ((user.spotify.accessTokenExpiresTime - Date.now()) < 10000 ) {
-		var spotifyApi = new SpotifyWebApi({
-	      clientId : authKeys.SPOTIFY_CLIENT_ID,
-	      clientSecret : authKeys.SPOTIFY_CLIENT_SECRET,
-	      redirectUri : authKeys.SPOTIFY_CALLBACK_URL
-	    });
-	    spotifyApi.setRefreshToken(user.spotify.refreshToken);
-	    spotifyApi.refreshAccessToken()
+	    spotifyApiInstance.refreshAccessToken()
 			.then(function(data) {
 			    console.log('The access token has been refreshed!');
 			    console.log(data.body)
@@ -36,4 +30,30 @@ var getNewAccessTokenIfExpired = function(user, done) {
 	}
 }
 
+var getCurrentUser = function(spotifyApiInstance, callback) {
+	spotifyApiInstance.getMe()
+	.then(function(data) {
+		console.log('Some information about the authenticated user', data.body);
+	}, function(err) {
+		console.log('Something went wrong!', err);
+	});
+}
+
+var getUserPlaylists = function(spotifyApiInstance, username, callback) {
+	spotifyApiInstance.getUserPlaylists(username,{limit: 50}, callback)
+}
+
+var createPlaylists = function(spotifyApiInstance, username, callback) {
+	spotifyApiInstance.createPlaylist('moch7', 'My Cool Playlist', { 'public' : false })
+	.then(function(data) {
+		console.log('Created playlist!');
+	}, function(err) {
+		console.log('Something went wrong!', err);
+	});
+}
+
+
+
 module.exports.getNewAccessTokenIfExpired = getNewAccessTokenIfExpired;
+module.exports.getUserPlaylists = getUserPlaylists;
+module.exports.getCurrentUser = getCurrentUser;

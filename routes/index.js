@@ -3,7 +3,7 @@ var express = require('express');
 var passport = require('passport');
 var async = require('async');
 var path = require('path');
-var Article = require('../models/articleModel.js');
+var User = require('../models/userModel.js');
 var router = express.Router();
 var authKeys = require('../authKeys.js');
 var spotifyHelper = require('../helpers/spotifyHelper.js');
@@ -25,16 +25,41 @@ var updateTokenTestGET = function(req, res) {
     })
 }
 
-var getPlaylistsGET = function(req, res) {
-
+var getCurrentUserGET = function(req, res) {
     var spotifyApi = new SpotifyWebApi({
       clientId : authKeys.SPOTIFY_CLIENT_ID,
       clientSecret : authKeys.SPOTIFY_CLIENT_SECRET,
       redirectUri : authKeys.SPOTIFY_CALLBACK_URL
     });
-    spotifyApi.setAccessToken();
+    spotifyApi.setAccessToken(req.user[0].spotify.accessToken)
+    spotifyApi.setRefreshToken(req.user[0].spotify.refreshToken)
+
+    spotifyHelper.getNewAccessTokenIfExpired(spotifyApi, req.user[0], function (err, user) {
+        spotifyHelper.getCurrentUser(spotifyApi)
+        res.send(user);
+    })
+}
+
+var getCurrentUserPlaylistsGET = function(req, res) {
+    var spotifyApi = new SpotifyWebApi({
+      clientId : authKeys.SPOTIFY_CLIENT_ID,
+      clientSecret : authKeys.SPOTIFY_CLIENT_SECRET,
+      redirectUri : authKeys.SPOTIFY_CALLBACK_URL
+    });
+    spotifyApi.setAccessToken(req.user[0].spotify.accessToken)
+    spotifyApi.setRefreshToken(req.user[0].spotify.refreshToken)
+
+    spotifyHelper.getNewAccessTokenIfExpired(spotifyApi, req.user[0], function (err, user) {
+        spotifyHelper.getUserPlaylists(spotifyApi,req.user[0].spotify.id, function (err, data) {
+            if (err) {return console.log(err)}
+            console.log(data.body)
+        })
+        res.send(user);
+    })
 }
 
 
 module.exports.home = homeGET;
 module.exports.updateTokenTest = updateTokenTestGET;
+module.exports.getCurrentUser = getCurrentUserGET;
+module.exports.getCurrentUserPlaylists = getCurrentUserPlaylistsGET;

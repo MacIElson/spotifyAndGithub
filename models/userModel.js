@@ -8,6 +8,10 @@ var userSchema = mongoose.Schema({
         accessTokenExpiresTime: Date,
         refreshToken : String
 
+    },
+    github : {
+    	username	 : String,
+    	accessToken  : String
     }
 });
 

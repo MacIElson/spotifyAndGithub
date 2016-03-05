@@ -46,9 +46,14 @@ app.use('/node_modules', express.static(__dirname + '/node_modules'));
 app.get('/', indexRoute.home);
 app.get('/home', indexRoute.home);
 app.get('/login', indexRoute.home);
+app.get('/getCurrentUser', authRoute.ensureAuthenticated, indexRoute.getCurrentUser);
+app.get('/getCurrentUserPlaylists', authRoute.ensureAuthenticated, indexRoute.getCurrentUserPlaylists);
+
+
+
 app.get('/updateTokenTest', authRoute.ensureAuthenticated, indexRoute.updateTokenTest);
 
-app.get('/auth/spotify', passport.authenticate('spotify', { scope: ['user-read-email', 'user-read-private']}));
+app.get('/auth/spotify', passport.authenticate('spotify', { scope: ['user-read-email', 'user-read-private','playlist-read-private', 'playlist-modify-private','playlist-modify-public']}));
 app.get('/auth/spotify/callback', passport.authenticate('spotify', { successRedirect: '/',
                                       failureRedirect: '/fail' })
 );
