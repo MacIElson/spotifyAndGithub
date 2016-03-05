@@ -27,6 +27,14 @@ var generateRandomString = function(length) {
   return text;
 };
 
+function bin2String(array) {
+  var result = "";
+  for (var i = 0; i < array.length; i++) {
+    result += String.fromCharCode(parseInt(array[i], 2));
+  }
+  return result;
+}
+
 var stateKey = 'github_auth_state';
 var apiKey = 'github_auth_api';
 
@@ -38,6 +46,7 @@ authroutes.getGithubAuth = function(req, res) {
 
 
   var state = generateRandomString(16);
+  console.log('State: ' + state);
   res.cookie(stateKey, state);
 
   // your application requests authorization
