@@ -44,7 +44,8 @@ var getUserPlaylists = function(spotifyApiInstance, username, callback) {
 
 var getPlaylistTracks = function(spotifyApiInstance, username, playlistId, callback) {
 	console.log('getPlaylistTracks')
-	spotifyApiInstance.getPlaylist(username, playlistId, {},function (err, data) {
+	playlistFields = 'limit, next, offset, total, items(id, name)'
+	spotifyApiInstance.getPlaylist(username, playlistId, {'fields' : playlistFields},function (err, data) {
 		if (err) {
 			console.log("get tracks error")
 			console.log(err)
