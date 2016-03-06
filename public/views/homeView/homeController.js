@@ -39,6 +39,16 @@ angular.module('myApp.homeView', ['ngRoute'])
 
     $scope.backupPlaylist = function(playlist) {
         console.log('Backing up playlist ' + playlist.name + '!')
+
+        var POSTplaylist = {user: playlist.owner.id, id: playlist.id}
+        $http.post('/backupPlaylist', POSTplaylist)
+            .success(function(data) {
+                console.log("playlist save successfull");
+                console.log(data);
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
     }
 
     console.log($scope);
