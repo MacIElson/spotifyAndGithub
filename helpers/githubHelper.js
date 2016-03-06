@@ -16,16 +16,10 @@ var createNewRepo = function(githubApiInstance, repoName, callback) {
 
     });
 }
-//create a new file in that repo
+//create a new file in that repo, or update the file if it exists. 
+//file should have the same name as playlist
+//new content replaces old content
 var createUpdateFile = function(githubApiInstance, repoName, playlistname, newcontent, message, callback) {
-    // var options = {
-    //   author: {name: 'Author Name', email: 'author@example.com'},
-    //   committer: {name: 'Committer Name', email: 'committer@example.com'},
-    //   encode: true // Whether to base64 encode the file. (default: true) 
-    // }
-    // repo.write('master', 'path/to/file', 'YOUR_NEW_CONTENTS', 'YOUR_COMMIT_MESSAGE', options, function(err) {});
-    // }
-
     console.log('Create-update function called!');
     var user = githubApiInstance.getUser();
     user.show(null, function(err, userfields) {
