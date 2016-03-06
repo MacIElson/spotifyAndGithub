@@ -14,6 +14,8 @@ angular.module('myApp.homeView', ['ngRoute'])
     $scope.user = {};
     $scope.playlists = {};
 
+    $scope.backedUp = null;
+
 	$scope.logout = function (){
     	//$location.path( '/auth/spotify' );
     	$window.location.href = '/auth/logout';
@@ -45,6 +47,7 @@ angular.module('myApp.homeView', ['ngRoute'])
             .success(function(data) {
                 console.log("playlist save successfull");
                 console.log(data);
+                $scope.backedUp = playlist.name;
             })
             .error(function(data) {
                 console.log('Error: ' + data);
