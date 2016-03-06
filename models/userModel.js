@@ -12,7 +12,8 @@ var userSchema = mongoose.Schema({
     github : {
     	login	 : String,
         id       : String,
-    	accessToken  : String
+    	accessToken  : String,
+        repoName: String
     }
 });
 
