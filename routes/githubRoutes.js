@@ -9,7 +9,7 @@ var authkeys = require('../authKeys.js');
 var querystring = require('querystring');
 var request = require('request');
 
-var Github = require('github-api');
+var GithubApi = require('github-api');
 
 var router = express.Router();
 var authroutes = {};
@@ -84,12 +84,12 @@ authroutes.getGithubCallback = function(req, res) {
 			req.user[0].github.accessToken = access_token
 
 		    //WHY NO WORK???
-		    var githubapi = new Github({
+		    var githubApi = new GithubApi({
 		    	token: access_token,
 		    	auth: "oauth"
 		    });
 
-		    var user = githubapi.getUser();
+		    var user = githubApi.getUser();
 		    user.show(null, function(err, user) {
 		    	if(err) {console.log(err)}
 		    	req.user[0].github.login = user.login

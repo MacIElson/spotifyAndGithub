@@ -35,7 +35,7 @@ module.exports = function(passport) {
                 // if the user is found, then log them in
                 if (user) {
                     console.log("existing User")
-                    //user.spotify.accessToken = accessToken; // we will save the token that facebook provides to the user                    
+                    user.spotify.accessToken = accessToken; // we will save the token that facebook provides to the user                    
                     user.spotify.refreshToken = refreshToken;
                     d = new Date();
                     d.setSeconds(d.getSeconds() + params.expires_in);//params.expires_in

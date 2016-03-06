@@ -7,7 +7,9 @@ var User = require('../models/userModel.js');
 var router = express.Router();
 var authKeys = require('../authKeys.js');
 var spotifyHelper = require('../helpers/spotifyHelper.js');
+var githubHelper = require('../helpers/githubHelper.js');
 var SpotifyWebApi = require('spotify-web-api-node');
+var GithubApi = require('github-api');
 
 module.exports = router;
 
@@ -22,6 +24,21 @@ var routeLoggedIn = function (req, res) {
     }
 }
 
+var stripUserArray = function(req,res, next) {
+    req.user = req.user[0];
+    next();
+}
+
+var attachGithubApiPASSTHROUGH = function(req, res, next) {
+    var githubApi = new GithubApi({
+        token: req.user.github.accessToken,
+        auth: "oauth"
+    });
+    req.githubApi = githubApi;
+    next();
+
+}
+
 var attachSpotifyApiPASSTHROUGH = function(req, res, next) {
 
     var spotifyApi = new SpotifyWebApi({
@@ -29,15 +46,11 @@ var attachSpotifyApiPASSTHROUGH = function(req, res, next) {
       clientSecret : authKeys.SPOTIFY_CLIENT_SECRET,
       redirectUri : authKeys.SPOTIFY_CALLBACK_URL
     });
-    console.log(req.user[0].spotify.accessToken)
-    console.log(req.user)
-    spotifyApi.setAccessToken(req.user[0].spotify.accessToken)
-    spotifyApi.setRefreshToken(req.user[0].spotify.refreshToken)
-    console.log(spotifyApi.getAccessToken())
-    spotifyHelper.getNewAccessTokenIfExpired(spotifyApi, req.user[0], function (err, spotifyApi, user) {
+    spotifyApi.setAccessToken(req.user.spotify.accessToken)
+    spotifyApi.setRefreshToken(req.user.spotify.refreshToken)
+    spotifyHelper.getNewAccessTokenIfExpired(spotifyApi, req.user, function (err, spotifyApi, user) {
         req.user = user;
         req.spotifyApi = spotifyApi;
-        console.log(user.spotify.accessToken)
         next();
     })
 
@@ -71,9 +84,29 @@ var getPlaylistTracksGET = function(req, res) {
         })
 }
 
+var backupPlaylistPOST = function(req, res) {
+    console.log(req.body)
+    spotifyHelper.getPlaylistTracks(req.spotifyApi, req.body.user, req.body.id, function(err, tracks){
+        console.log(tracks)
+        githubHelper.createUpdateFile(req.githubApi, "spotifyHistory", req.body.id, JSON.stringify(tracks, null, 4), "backup!", function(err) {
+            if (err) {
+                console.log(err)
+                res.send(err)
+            } else {
+                console.log('successfully updated file')
+                res.send(null)
+            }
+
+        })
+    })
+}
+
 module.exports.routeLoggedIn = routeLoggedIn;
+module.exports.stripUserArray = stripUserArray;
 module.exports.attachSpotifyApi = attachSpotifyApiPASSTHROUGH;
+module.exports.attachGithubApi = attachGithubApiPASSTHROUGH;
 module.exports.home = homeGET;
 module.exports.getCurrentUser = getCurrentUserGET;
 module.exports.getCurrentUserPlaylists = getCurrentUserPlaylistsGET;
 module.exports.getPlaylistTracks = getPlaylistTracksGET;
+module.exports.backupPlaylist = backupPlaylistPOST;

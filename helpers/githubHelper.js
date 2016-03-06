@@ -22,7 +22,9 @@ var createNewRepo = function(githubApiInstance, repoName, callback) {
 var createUpdateFile = function(githubApiInstance, repoName, playlistname, newcontent, message, callback) {
     console.log('Create-update function called!');
     var user = githubApiInstance.getUser();
+    console.log(user)
     user.show(null, function(err, userfields) {
+        console.log(err)
 
         username = userfields.login;
         console.log('User login: ' + username);
@@ -31,7 +33,6 @@ var createUpdateFile = function(githubApiInstance, repoName, playlistname, newco
         repo.write('master', playlistname, newcontent, message, function(err) {
             if(err) { console.log(err); }
             else { console.log('Success with write!'); }
-
             if(callback && typeof(callback) === "function") {
                 callback(err)
             }
@@ -43,4 +44,4 @@ var createUpdateFile = function(githubApiInstance, repoName, playlistname, newco
 
 
 module.exports.createNewRepo = createNewRepo;
-module.exports.createUpdateFile = createUpdateFile;S
+module.exports.createUpdateFile = createUpdateFile;

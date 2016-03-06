@@ -45,13 +45,17 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use('/node_modules', express.static(__dirname + '/node_modules'));
 
 app.get('/', indexRoute.routeLoggedIn);
-app.get('/home', authRoute.ensureAuthenticated, indexRoute.attachSpotifyApi, indexRoute.home);
 app.get('/login', indexRoute.home);
-app.get('/loginGithub', indexRoute.home);
+app.get('/loginGithub', authRoute.ensureAuthenticated, indexRoute.home);
+app.get('/home', authRoute.ensureAuthenticated, indexRoute.stripUserArray, indexRoute.attachSpotifyApi, indexRoute.attachGithubApi, indexRoute.home);
 
-app.get('/getCurrentUser', authRoute.ensureAuthenticated, indexRoute.attachSpotifyApi, indexRoute.getCurrentUser);
-app.get('/getCurrentUserPlaylists', authRoute.ensureAuthenticated, indexRoute.attachSpotifyApi, indexRoute.getCurrentUserPlaylists);
-app.get('/getPlaylistTracks', authRoute.ensureAuthenticated, indexRoute.attachSpotifyApi, indexRoute.getPlaylistTracks);
+
+
+app.get('/getCurrentUser', authRoute.ensureAuthenticated, indexRoute.stripUserArray, indexRoute.attachSpotifyApi, indexRoute.getCurrentUser);
+app.get('/getCurrentUserPlaylists', authRoute.ensureAuthenticated, indexRoute.stripUserArray, indexRoute.attachSpotifyApi, indexRoute.getCurrentUserPlaylists);
+app.get('/getPlaylistTracks', authRoute.ensureAuthenticated, indexRoute.stripUserArray, indexRoute.attachSpotifyApi, indexRoute.getPlaylistTracks);
+
+app.post('/backupPlaylist', authRoute.ensureAuthenticated, indexRoute.stripUserArray, indexRoute.attachSpotifyApi, indexRoute.attachGithubApi, indexRoute.backupPlaylist);
 
 app.get('/auth/spotify', passport.authenticate('spotify', { scope: ['user-read-email', 'user-read-private','playlist-read-private', 'playlist-modify-private','playlist-modify-public']}));
 app.get('/auth/spotify/callback', passport.authenticate('spotify', { successRedirect: '/',
