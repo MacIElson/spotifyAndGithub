@@ -6,7 +6,7 @@ var express = require('express');
 var async = require('async');
 var path = require('path');
 var Article = require('../models/articleModel.js');
-var gitauth = require('../authKeys.js');
+var authkeys = require('../authKeys.js');
 var querystring = require('querystring');
 var request = require('request');
 
@@ -50,13 +50,13 @@ authroutes.getGithubAuth = function(req, res) {
   res.cookie(stateKey, state);
 
   // your application requests authorization
-  console.log(gitauth.github.clientID);
+  console.log(authkeys.GITHUB_CLIENT_ID);
   var scope = 'user repo';
   res.redirect('https://github.com/login/oauth/authorize?' +
     querystring.stringify({
-      client_id: gitauth.github.clientID,
+      client_id: authkeys.GITHUB_CLIENT_ID,
       scope: scope,
-      redirect_uri: 'http://localhost:3000/auth/github/callback',
+      redirect_uri: authkeys.GITHUB_CALLBACK_URL,
       state: state
     }));
 };
@@ -80,9 +80,9 @@ authroutes.getGithubCallback = function(req, res) {
       url: 'https://github.com/login/oauth/access_token',
       form: {
         code: code,
-        client_id: gitauth.github.clientID,
-        client_secret: gitauth.github.clientSecret,
-        redirect_uri: 'http://localhost:3000/auth/github/token',
+        client_id: authkeys.GITHUB_CLIENT_ID,
+        client_secret: authkeys.GITHUB_CLIENT_SECRET,
+        // redirect_uri: 'http://localhost:3000/auth/github/callback/token',
         state: state
       },
       json: true
