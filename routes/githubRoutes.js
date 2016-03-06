@@ -8,7 +8,7 @@ var authKeys = require('../authKeys.js');
 var authkeys = require('../authKeys.js');
 var querystring = require('querystring');
 var request = require('request');
-
+var githubHelper = require('../helpers/githubHelper.js');
 var GithubApi = require('github-api');
 
 var router = express.Router();
@@ -97,8 +97,23 @@ authroutes.getGithubCallback = function(req, res) {
 		    	req.user[0].save(function(err) {
 	                if (err)
 	                    throw err;
-	                res.redirect('/');
+	                console.log('saved user github details')
 	            });
+		    	githubHelper.createNewRepo(githubApi, 'spotifyHistory', function(err, response) {
+		    		console.log('createRepoCallback')
+		    		if (err) {
+		    			console.log(err)
+		    		}
+		    		req.user[0].github.repoName = 'spotifyHistory'
+		    		req.user[0].save(function(err) {
+		                if (err)
+		                    throw err;
+		                console.log('saved user github repoName')
+		                res.redirect('/');
+		            });
+	                	
+	            })
+
 		    })
 
 		    

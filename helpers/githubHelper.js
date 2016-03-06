@@ -7,7 +7,10 @@ var createNewRepo = function(githubApiInstance, repoName, callback) {
     user.show(null, function(err, userfields) {
         //if repo already exists, will not create. WIll error instead...?
         user.createRepo({"name": repoName}, function(err, res) {
-            if(err) { console.log(err); } 
+            if(err) { 
+                console.log('err from CreateRepo')
+                console.log(err); 
+            } 
 
             if (callback && typeof(callback) === "function") {
                 callback(err, res);
