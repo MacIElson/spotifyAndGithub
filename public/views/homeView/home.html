@@ -5,4 +5,10 @@
     <md-button ng-click="logout()">Logout</md-button>
 </md-toolbar>
 
+
+
+
+     <div id="playlists" class="list-group" ng-repeat="playlist in playlists">
+          {{playlist.name}} <button type="submit" ng-click="backupPlaylist(playlist)"> Back Up Playlist</button>
+     </div>
 </md-content>
