@@ -11,6 +11,8 @@ var request = require('request');
 
 var Github = require('github-api');
 
+var githelper = require('../helpers/githubHelper.js');
+
 var router = express.Router();
 var authroutes = {};
 
@@ -99,6 +101,14 @@ authroutes.getGithubCallback = function(req, res) {
 	                    throw err;
 	            });
 		    })
+
+		    //TESTING HELPERS
+		    githelper.createNewRepo(githubapi, "testrepo", function(err, res) {
+		    	//if prints, successful callback!!!!
+		    	//console.log(res);
+		    	githelper.createUpdateFile(githubapi, "testrepo", "testplaylist", "blargh more stuff", "adding fifth commit");
+		    });
+
 
 		    res.redirect('/#' +
 		    	querystring.stringify({
