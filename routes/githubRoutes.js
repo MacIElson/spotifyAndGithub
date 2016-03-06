@@ -97,21 +97,16 @@ authroutes.getGithubCallback = function(req, res) {
 		    	req.user[0].save(function(err) {
 	                if (err)
 	                    throw err;
+	                res.redirect('/');
 	            });
 		    })
 
-		    res.redirect('/#' +
-		    	querystring.stringify({
-		    		access_token: access_token,
-		    	}));
+		    
 
 
 		} else {
 			console.log('Authentication error!');
-			res.redirect('/#' +
-				querystring.stringify({
-					error: 'invalid_token'
-				}));
+			res.redirect('/');
 		}
 
 

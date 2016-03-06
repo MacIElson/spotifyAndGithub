@@ -3,10 +3,11 @@ angular.module('myApp', [
   'ngRoute',
   'ngMaterial',
   'myApp.loginView',
+  'myApp.loginGithubView',
   'myApp.homeView'
 ]).
 config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
-  $routeProvider.otherwise({redirectTo: '/home'});
+  $routeProvider.otherwise({redirectTo: '/'});
 
   $locationProvider.html5Mode({ enabled: true, requireBase: false });
 }]);

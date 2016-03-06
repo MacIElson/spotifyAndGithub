@@ -10,8 +10,8 @@ angular.module('myApp.homeView', ['ngRoute'])
 .controller('homeController', ['$scope','$window', function($scope,$window) {
 	console.log("homeController loaded");
 
-	$scope.loginGithub = function (){
+	$scope.logout = function (){
     	//$location.path( '/auth/spotify' );
-    	$window.location.href = '/auth/github';
+    	$window.location.href = '/auth/logout';
 	};
 }]);
