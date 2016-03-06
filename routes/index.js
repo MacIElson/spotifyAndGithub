@@ -12,6 +12,7 @@ var SpotifyWebApi = require('spotify-web-api-node');
 module.exports = router;
 
 var routeLoggedIn = function (req, res) {
+    console.log(req.user)
     if (!req.isAuthenticated()) {
         res.redirect('/login');
     } else if (typeof req.user[0].github.id === "undefined") {
@@ -28,12 +29,15 @@ var attachSpotifyApiPASSTHROUGH = function(req, res, next) {
       clientSecret : authKeys.SPOTIFY_CLIENT_SECRET,
       redirectUri : authKeys.SPOTIFY_CALLBACK_URL
     });
+    console.log(req.user[0].spotify.accessToken)
+    console.log(req.user)
     spotifyApi.setAccessToken(req.user[0].spotify.accessToken)
     spotifyApi.setRefreshToken(req.user[0].spotify.refreshToken)
-
+    console.log(spotifyApi.getAccessToken())
     spotifyHelper.getNewAccessTokenIfExpired(spotifyApi, req.user[0], function (err, spotifyApi, user) {
         req.user = user;
         req.spotifyApi = spotifyApi;
+        console.log(user.spotify.accessToken)
         next();
     })
 
@@ -46,6 +50,8 @@ var homeGET = function(req, res) {
 
 var getCurrentUserGET = function(req, res) {
     spotifyHelper.getCurrentUser(req.spotifyApi, function(err, data) {
+        console.log(err)
+        console.log(data)
         res.send(data.body);
     })
 }

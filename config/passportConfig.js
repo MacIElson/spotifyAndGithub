@@ -14,7 +14,6 @@ module.exports = function(passport) {
     // used to deserialize the user
     passport.deserializeUser(function(id, done) {
         User.find( {'spotify.id' : id }, function(err, user) {
-            console.log(user)
             done(err, user);
         });
     });
@@ -25,6 +24,8 @@ module.exports = function(passport) {
         callbackURL: authKeys.SPOTIFY_CALLBACK_URL
       },
       function(accessToken, refreshToken, params , profile, done) {
+        console.log('accessTokenPassport')
+        console.log(accessToken)
         User.findOne({ 'spotify.id' : profile.id }, function(err, user) {
                 // if there is an error, stop everything and return that
                 // ie an error connecting to the database
@@ -34,10 +35,10 @@ module.exports = function(passport) {
                 // if the user is found, then log them in
                 if (user) {
                     console.log("existing User")
-                    user.spotify.accessToken = accessToken; // we will save the token that facebook provides to the user                    
+                    //user.spotify.accessToken = accessToken; // we will save the token that facebook provides to the user                    
                     user.spotify.refreshToken = refreshToken;
                     d = new Date();
-                    d.setSeconds(d.getSeconds() + 60);//params.expires_in
+                    d.setSeconds(d.getSeconds() + params.expires_in);//params.expires_in
                     user.spotify.accessTokenExpiresTime = d;
                     user.save(function(err) {
                         if (err)

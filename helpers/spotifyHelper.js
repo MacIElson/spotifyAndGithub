@@ -10,15 +10,17 @@ var getNewAccessTokenIfExpired = function(spotifyApiInstance, user, callback) {
 			.then(function(data) {
 			    console.log('The access token has been refreshed!');
 			    console.log(data.body)
-			    user.spotify.accessToken = data.access_token
+			    console.log(spotifyApiInstance.getAccessToken())
+			    //spotifyApiInstance.setAccessToken(data.access_token)
+			    user.spotify.accessToken = data.body.access_token
 			    d = new Date();
 	            d.setSeconds(d.getSeconds() + data.body.expires_in);
 	            user.spotify.accessTokenExpiresTime = d;
 	            user.save(function(err) {
 	                if (err)
 	                    throw err;
-
-	                        // if successful, return the user
+	                console.log('updatedUser')
+	                console.log(user)
 	                return callback(null, spotifyApiInstance, user);
 	            });
 
