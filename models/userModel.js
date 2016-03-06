@@ -10,7 +10,8 @@ var userSchema = mongoose.Schema({
 
     },
     github : {
-    	username	 : String,
+    	login	 : String,
+        id       : String,
     	accessToken  : String
     }
 });

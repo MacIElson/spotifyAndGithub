@@ -7,6 +7,11 @@ angular.module('myApp.homeView', ['ngRoute'])
   });
 }])
 
-.controller('homeController', [function() {
+.controller('homeController', ['$scope','$window', function($scope,$window) {
 	console.log("homeController loaded");
+
+	$scope.loginGithub = function (){
+    	//$location.path( '/auth/spotify' );
+    	$window.location.href = '/auth/github';
+	};
 }]);

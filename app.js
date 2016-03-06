@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 var express = require('express');
 var indexRoute = require('./routes/index');
 var authRoute = require('./routes/authRoutes');
+var githubRoute = require('./routes/githubRoutes');
 var mongoose = require('mongoose');
 var favicon = require('serve-favicon');
 var session = require('express-session');
@@ -43,9 +44,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use('/node_modules', express.static(__dirname + '/node_modules'));
 
-app.get('/', indexRoute.home);
-app.get('/home', indexRoute.home);
+app.get('/', authRoute.ensureAuthenticated, indexRoute.home);
+app.get('/home', authRoute.ensureAuthenticated, indexRoute.home);
 app.get('/login', indexRoute.home);
+
 app.get('/getCurrentUser', authRoute.ensureAuthenticated, indexRoute.getCurrentUser);
 app.get('/getCurrentUserPlaylists', authRoute.ensureAuthenticated, indexRoute.getCurrentUserPlaylists);
 
@@ -57,6 +59,9 @@ app.get('/auth/spotify', passport.authenticate('spotify', { scope: ['user-read-e
 app.get('/auth/spotify/callback', passport.authenticate('spotify', { successRedirect: '/',
                                       failureRedirect: '/fail' })
 );
+
+app.get('/auth/github', githubRoute.getGithubAuth)
+app.get('/auth/github/callback', githubRoute.getGithubCallback)
 
 app.get('/auth/user', authRoute.ensureAuthenticated, authRoute.user)
 app.get('/auth/logout', authRoute.logout);
