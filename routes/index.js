@@ -57,14 +57,23 @@ var getCurrentUserGET = function(req, res) {
 }
 
 var getCurrentUserPlaylistsGET = function(req, res) {
-        spotifyHelper.getUserPlaylists(req.spotifyApi,req.user.spotify.id, function (err, data) {
+        spotifyHelper.getUserPlaylists(req.spotifyApi,req.user.spotify.id, function (err, playlists) {
             if (err) {return console.log(err)}
-            res.send(data.body);
+            res.send(playlists);
         })
 }
 
+var getPlaylistTracksGET = function(req, res) {
+        console.log('getPlaylistTracksGET')
+        spotifyHelper.getPlaylistTracks(req.spotifyApi,req.user.spotify.id, '5ayVO4Y7RwpdHbrVl0Lkzm',function (err, tracks) {
+            if (err) {return console.log(err)}
+            res.send(tracks);
+        })
+}
+
+module.exports.routeLoggedIn = routeLoggedIn;
 module.exports.attachSpotifyApi = attachSpotifyApiPASSTHROUGH;
 module.exports.home = homeGET;
 module.exports.getCurrentUser = getCurrentUserGET;
 module.exports.getCurrentUserPlaylists = getCurrentUserPlaylistsGET;
-module.exports.routeLoggedIn = routeLoggedIn;
+module.exports.getPlaylistTracks = getPlaylistTracksGET;

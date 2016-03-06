@@ -51,6 +51,7 @@ app.get('/loginGithub', indexRoute.home);
 
 app.get('/getCurrentUser', authRoute.ensureAuthenticated, indexRoute.attachSpotifyApi, indexRoute.getCurrentUser);
 app.get('/getCurrentUserPlaylists', authRoute.ensureAuthenticated, indexRoute.attachSpotifyApi, indexRoute.getCurrentUserPlaylists);
+app.get('/getPlaylistTracks', authRoute.ensureAuthenticated, indexRoute.attachSpotifyApi, indexRoute.getPlaylistTracks);
 
 app.get('/auth/spotify', passport.authenticate('spotify', { scope: ['user-read-email', 'user-read-private','playlist-read-private', 'playlist-modify-private','playlist-modify-public']}));
 app.get('/auth/spotify/callback', passport.authenticate('spotify', { successRedirect: '/',

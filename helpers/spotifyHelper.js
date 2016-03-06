@@ -37,14 +37,22 @@ var getCurrentUser = function(spotifyApiInstance, callback) {
 }
 
 var getUserPlaylists = function(spotifyApiInstance, username, callback) {
-	spotifyApiInstance.getUserPlaylists(username,{limit: 50}, callback)
+	spotifyApiInstance.getUserPlaylists(username,{limit: 50}, function (err, data) {
+		callback(err, data.body.items)
+	})
 }
 
 var getPlaylistTracks = function(spotifyApiInstance, username, playlistId, callback) {
-	spotifyApi.getPlaylist(username, playlistId, callback)
+	console.log('getPlaylistTracks')
+	spotifyApiInstance.getPlaylist(username, playlistId, {},function (err, data) {
+		if (err) {return callback(err, null)}
+		console.log('getPlaylistCallback')
+		callback(err, data.body)
+	})
 }
 
 var createPlaylist = function(spotifyApiInstance, username, title, callback) {
+
 	spotifyApiInstance.createPlaylist(username, title, { 'public' : false },callback)
 }
 
