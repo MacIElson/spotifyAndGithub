@@ -108,8 +108,21 @@ var getCommitContent = function(githubApiInstance, repoName, playlistname, sha, 
         var link = 'https://raw.githubusercontent.com/' + username + '/' + repoName + '/' + sha + '/' + filename;
         request.get(link, function(err, response, body) {
 
+            var content = JSON.parse(body);
+
+            console.log(content["tracks"].items);
+            tracks = content["tracks"].items; 
+
+            track_ids = [];
+            for(var i in tracks) {
+                console.log('Item ' + i + ' ' + tracks[i].track.name);
+                console.log(tracks[i].track.id);
+                track_ids.push(tracks[i].track.id);
+            }
+
+            // console.log(content.items)
             if(callback && typeof(callback) === "function") {
-                callback(err, body)
+                callback(err, track_ids)
             }
         
         })
