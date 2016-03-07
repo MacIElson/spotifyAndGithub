@@ -55,8 +55,44 @@ var getPlaylistTracks = function(spotifyApiInstance, username, playlistId, callb
 
 }
 
+var insertPlaylistTracks = function(spotifyApiInstance,username, playlistId, tracks, callback) {
+
+	var tracks = trackss.map(function(trackId){
+		var base = 'spotify:track:'; 
+		return base.concat(trackId)
+	});
+	var len = 100;
+	var trackChunks = [];
+	var i = 0;
+	var n = tracks.length;
+
+	while (i < n) {
+		trackChunks.push(tracks.slice(i, i += len));
+	}
+
+	insertPlaylistTracksHelper(spotifyApiInstance,username, playlistId, trackChunks, callback);
+
+}
+
+var insertPlaylistTracksHelper = function(spotifyApiInstance,username, playlistId, trackChunks, callback) {
+	chunk = trackChunks.shift();
+	spotifyApi.addTracksToPlaylist(username, playlistId, chunk ,{}, function(err, data) {
+		if (err) {
+			console.log('err in insertPlaylistTracksHelper')
+			console.log(err)
+			callback(err, null)
+		} else {
+			if (len(trackChunks) = 0) {
+				callback(null, null)
+			} else {
+				insertPlaylistTracksHelper(spotifyApiInstance,username, playlistId, trackChunks, callback);
+			}
+		}
+	})
+}
+
 var createPlaylist = function(spotifyApiInstance, username, title, callback) {
-	spotifyApiInstance.createPlaylist(username, title, { 'public' : false },callback)
+	spotifyApiInstance.createPlaylist(username, title, { 'public' : false }, callback)
 }
 
 
