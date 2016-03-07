@@ -10,6 +10,8 @@ var spotifyHelper = require('../helpers/spotifyHelper.js');
 var githubHelper = require('../helpers/githubHelper.js');
 var SpotifyWebApi = require('spotify-web-api-node');
 var GithubApi = require('github-api');
+var request = require('request');
+var fs = require('fs');
 
 module.exports = router;
 
@@ -101,6 +103,30 @@ var backupPlaylistPOST = function(req, res) {
     })
 }
 
+
+//testing github helper getFileSHAs
+var getFileSHAsGET = function(req, res) {
+    filename = '503HzKH74uYiK6TJmU868m';
+    githubHelper.getFileSHAs(req.githubApi, "spotifyHistory", filename, function(err, repodata) {
+        if(err) { console.log(err); }
+        else { res.send(repodata); }
+    })
+
+
+}
+
+//testing github helper getCommitContent
+var getCommitContentGET = function(req, res) {
+    sha = 'b469c2385de18eb52174dfdf9dafd5be2b6c825c';
+    filename = '503HzKH74uYiK6TJmU868m';
+    githubHelper.getCommitContent(req.githubApi, "spotifyHistory", filename, sha, function(err, data) {
+        if(err) { console.log(err); }
+        else { res.send(data); }
+    })
+
+    
+}
+
 module.exports.routeLoggedIn = routeLoggedIn;
 module.exports.stripUserArray = stripUserArray;
 module.exports.attachSpotifyApi = attachSpotifyApiPASSTHROUGH;
@@ -110,3 +136,5 @@ module.exports.getCurrentUser = getCurrentUserGET;
 module.exports.getCurrentUserPlaylists = getCurrentUserPlaylistsGET;
 module.exports.getPlaylistTracks = getPlaylistTracksGET;
 module.exports.backupPlaylist = backupPlaylistPOST;
+module.exports.getCommitContent = getCommitContentGET;
+module.exports.getFileSHAs = getFileSHAsGET;
