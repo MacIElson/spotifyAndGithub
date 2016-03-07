@@ -7,10 +7,15 @@
 
 
     <div id="playlists" class="list-group" ng-repeat="playlist in playlists">
-        {{playlist.name}} <button type="submit" ng-click="backupPlaylist(playlist)"> Back Up Playlist</button>
+        {{playlist.name}}, {{playlist.id}} <button type="submit" ng-click="backupPlaylist(playlist)"> Back Up Playlist</button>
+        <button type="submit" ng-click="restorePrevious(playlist)"> Restore Older Version</button>
     </div>
 
     <div ng-show="backedUp">
         Successfully backed up {{backedUp}}!
+    </div>
+
+    <div ng-show="restored">
+        Successfully backed up {{restored}}!
     </div>
 </md-content>
