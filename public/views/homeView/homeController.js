@@ -14,6 +14,11 @@ angular.module('myApp.homeView', ['ngRoute'])
     $scope.user = {};
     $scope.playlists = {};
 
+    $scope.reverting = {}
+    $scope.reverting.playlist = {};
+    $scope.reverting.show = false;
+    $scope.reverting.commits = [];
+
     //names of last backed-up/restored playlists
     $scope.backedUp = null;
     $scope.restored = null;
@@ -56,10 +61,26 @@ angular.module('myApp.homeView', ['ngRoute'])
             });
     }
 
-    $scope.restorePrevious = function(playlist) {
-        console.log('Restoring previous version of ' + playlist.name + '!')
-        $scope.restored = playlist.name;
+    $scope.showPrevious = function(playlist) {
+        console.log('Showing previous versions of ' + playlist.id);
 
+        $http.get('/getFileSHAs', {
+            params: {playlist_id: playlist.id}
+        })
+            .success(function(data) {
+                console.log('Shas: ' + data)
+                $scope.reverting.show = true;
+                $scope.reverting.playlist = playlist;
+                $scope.reverting.commits = data;
+            })
+            .error(function(data) {
+                console.log('Error: ' + data)
+            })
+
+    }
+
+    $scope.restorePlaylist = function(playlist, commit) {
+        console.log('Reverting ' + playlist.name + ' ' + commit)
     }
 
     console.log($scope);

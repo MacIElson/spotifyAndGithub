@@ -12,6 +12,10 @@ var SpotifyWebApi = require('spotify-web-api-node');
 var GithubApi = require('github-api');
 var request = require('request');
 var fs = require('fs');
+var bodyParser = require('body-parser');
+
+var http = require("http");
+var url = require("url");
 
 module.exports = router;
 
@@ -100,9 +104,18 @@ var backupPlaylistPOST = function(req, res) {
 }
 
 
-//testing github helper getFileSHAs
+//testing github helper getFileSHAs. test at /sha
 var getFileSHAsGET = function(req, res) {
-    filename = '503HzKH74uYiK6TJmU868m';
+    //filename = '503HzKH74uYiK6TJmU868m';
+
+    var parsedUrl = url.parse(req.url, true); // true to get query as object
+    var queryAsObject = parsedUrl.query;
+    filename = queryAsObject.playlist_id;
+
+    console.log(queryAsObject);
+
+
+    console.log('getFileSHAsGET filename ' + filename)
     githubHelper.getFileSHAs(req.githubApi, "spotifyHistory", filename, function(err, repodata) {
         if(err) { console.log(err); }
         else { res.send(repodata); }
@@ -111,7 +124,7 @@ var getFileSHAsGET = function(req, res) {
 
 }
 
-//testing github helper getCommitContent
+//testing github helper getCommitContent. test at /commit
 var getCommitContentGET = function(req, res) {
     sha = 'b469c2385de18eb52174dfdf9dafd5be2b6c825c';
     filename = '503HzKH74uYiK6TJmU868m';
