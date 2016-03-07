@@ -47,11 +47,6 @@ var createUpdateFile = function(githubApiInstance, repoName, playlistname, newco
 }
 
 
-//get all repo SHAs
-//from all SHAs, get all commit details
-//from commit details, find out which files were modified in each commit
-//keep list of which SHAs correspond to which files...?
-
 //given filename (ie. playlist ID), get all commit SHAs
 var getFileSHAs = function(githubApiInstance, repoName, playlistname, callback) {
     var user = githubApiInstance.getUser()
@@ -64,15 +59,26 @@ var getFileSHAs = function(githubApiInstance, repoName, playlistname, callback) 
         var options = {
           url: url,
           headers: {            //CHANGE TO SKUMARASENA IF UNAUTHORIZED
-            'User-Agent': username
+            'User-Agent': username, 
+            'Content-Type': "application/json"
           }
 
         };
 
         request(options, function(err, response, body) {
+            // console.log(response)
+            // var json = JSON.stringify(eval("(" + body + ")"));
+            var commitlist = JSON.parse(body)
+
+
+            shas = [];
+            for (var i in commitlist) {
+                shas.push(commitlist[i].sha)
+                console.log(commitlist[i].sha)
+            }
 
             if(callback && typeof(callback) === "function") {
-                callback(err, body)
+                callback(err, shas) //body)
             }
         })
 
