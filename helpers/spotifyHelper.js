@@ -1,5 +1,6 @@
 var authKeys = require('../authKeys.js');
 var SpotifyWebApi = require('spotify-web-api-node');
+var request = require('request');
 
 //user is a user object and done it the callback function
 var getNewAccessTokenIfExpired = function(spotifyApiInstance, user, callback) {
@@ -43,19 +44,17 @@ var getUserPlaylists = function(spotifyApiInstance, username, callback) {
 }
 
 var getPlaylistTracks = function(spotifyApiInstance, username, playlistId, callback) {
-	console.log('getPlaylistTracks')
-	playlistFields = 'limit,next,offset,total,items(id,name)'
-	// 'fields' : playlistFields
-	spotifyApiInstance.getPlaylist(username, playlistId, {},function (err, data) {
-		if (err) {
-			console.log("get tracks error")
-			console.log(err)
-			return callback(err, null)
-		}
-		console.log('getPlaylistCallback')
-		console.log(data.body)
-		callback(err, data.body)
-	})
+	console.log('getPlaylistTracks2')
+	url = 'https://api.spotify.com/v1/users/'+username+'/playlists/'+playlistId+'/tracks'
+	token = spotifyApiInstance.getAccessToken()
+	request({url:url, qs: {limit:100,fields: 'items(track(name,id,is_local,album(name)))'}}, function (error, response, body) {
+	  if (!error && response.statusCode == 200) {
+	    console.log(JSON.parse(body).items) // Show the HTML for the Google homepage.
+	    callback(null,JSON.parse(body));
+	  }
+	  callback(error,null);
+	}).auth(null, null, true, token);
+
 }
 
 var createPlaylist = function(spotifyApiInstance, username, title, callback) {

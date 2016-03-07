@@ -25,12 +25,10 @@ var createNewRepo = function(githubApiInstance, repoName, callback) {
 var createUpdateFile = function(githubApiInstance, repoName, playlistname, newcontent, message, callback) {
     console.log('Create-update function called!');
     var user = githubApiInstance.getUser();
-    console.log(user)
     user.show(null, function(err, userfields) {
         console.log(err)
 
         username = userfields.login;
-        console.log('User login: ' + username);
         
         repo = githubApiInstance.getRepo(username, repoName);
         repo.write('master', playlistname, newcontent, message, function(err) {
