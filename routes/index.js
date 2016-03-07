@@ -16,7 +16,6 @@ var fs = require('fs');
 module.exports = router;
 
 var routeLoggedIn = function (req, res) {
-    console.log(req.user)
     if (!req.isAuthenticated()) {
         res.redirect('/login');
     } else if (typeof req.user[0].github.id === "undefined") {
@@ -65,8 +64,6 @@ var homeGET = function(req, res) {
 
 var getCurrentUserGET = function(req, res) {
     spotifyHelper.getCurrentUser(req.spotifyApi, function(err, data) {
-        console.log(err)
-        console.log(data)
         res.send(data.body);
     })
 }
@@ -89,7 +86,6 @@ var getPlaylistTracksGET = function(req, res) {
 var backupPlaylistPOST = function(req, res) {
     console.log(req.body)
     spotifyHelper.getPlaylistTracks(req.spotifyApi, req.body.user, req.body.id, function(err, tracks){
-        console.log(tracks)
         githubHelper.createUpdateFile(req.githubApi, "spotifyHistory", req.body.id, JSON.stringify(tracks, null, 4), "backup!", function(err) {
             if (err) {
                 console.log(err)
