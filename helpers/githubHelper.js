@@ -27,13 +27,19 @@ var createUpdateFile = function(githubApiInstance, repoName, playlistname, newco
     console.log('Create-update function called!');
     var user = githubApiInstance.getUser();
     user.show(null, function(err, userfields) {
-        console.log(err)
-
+        if (err) {
+            console.log('error getting user is createUpdateFile')
+            console.log(err)
+        }
+        
         username = userfields.login;
         
         repo = githubApiInstance.getRepo(username, repoName);
         repo.write('master', playlistname, newcontent, message, function(err) {
-            if(err) { console.log(err); }
+            if(err) { 
+                console.log('err is repo.write');
+                console.log(err);
+            }
             else { console.log('Success with write!'); }
             if(callback && typeof(callback) === "function") {
                 callback(err)

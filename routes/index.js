@@ -88,7 +88,7 @@ var getPlaylistTracksGET = function(req, res) {
 }
 
 var backupPlaylistPOST = function(req, res) {
-    console.log(req.body)
+    console.log("backupPlaylistPOST")
     spotifyHelper.getPlaylistTracks(req.spotifyApi, req.body.user, req.body.id, function(err, tracks){
         githubHelper.createUpdateFile(req.githubApi, "spotifyHistory", req.body.id, JSON.stringify(tracks, null, 4), "backup!", function(err) {
             if (err) {
@@ -104,7 +104,7 @@ var backupPlaylistPOST = function(req, res) {
 }
 
 
-//testing github helper getFileSHAs. test at /sha
+
 var getFileSHAsGET = function(req, res) {
     //filename = '503HzKH74uYiK6TJmU868m';
 

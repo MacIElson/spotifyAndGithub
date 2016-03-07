@@ -5,13 +5,10 @@ var request = require('request');
 //user is a user object and done it the callback function
 var getNewAccessTokenIfExpired = function(spotifyApiInstance, user, callback) {
 	console.log("user in getNewAccessTokenIfExpired")
-	console.log(user)
 	if ((user.spotify.accessTokenExpiresTime - Date.now()) < 60000 ) {
 	    spotifyApiInstance.refreshAccessToken()
 			.then(function(data) {
 			    console.log('The access token has been refreshed!');
-			    console.log(data.body)
-			    console.log(spotifyApiInstance.getAccessToken())
 			    //spotifyApiInstance.setAccessToken(data.access_token)
 			    user.spotify.accessToken = data.body.access_token
 			    d = new Date();
@@ -21,7 +18,6 @@ var getNewAccessTokenIfExpired = function(spotifyApiInstance, user, callback) {
 	                if (err)
 	                    throw err;
 	                console.log('updatedUser')
-	                console.log(user)
 	                return callback(null, spotifyApiInstance, user);
 	            });
 
@@ -45,20 +41,21 @@ var getUserPlaylists = function(spotifyApiInstance, username, callback) {
 
 var getPlaylistTracks = function(spotifyApiInstance, username, playlistId, callback) {
 	console.log('getPlaylistTracks2')
-	url = 'https://api.spotify.com/v1/users/'+username+'/playlists/'+playlistId+'/tracks'
+	url = 'https://api.spotify.com/v1/users/'+username+'/playlists/'+playlistId
 	token = spotifyApiInstance.getAccessToken()
-	request({url:url, qs: {limit:100,fields: 'items(track(name,id,is_local,album(name)))'}}, function (error, response, body) {
+	request({url:url, qs: {fields: 'name,id,tracks(items(track(name,id,is_local,album(name))),next)'}}, function (error, response, body) {
 	  if (!error && response.statusCode == 200) {
-	    console.log(JSON.parse(body).items) // Show the HTML for the Google homepage.
+	    console.log(JSON.parse(body)) // Show the HTML for the Google homepage.
 	    callback(null,JSON.parse(body));
+	  } else {
+	  	callback(error,null);
 	  }
-	  callback(error,null);
+	  
 	}).auth(null, null, true, token);
 
 }
 
 var createPlaylist = function(spotifyApiInstance, username, title, callback) {
-
 	spotifyApiInstance.createPlaylist(username, title, { 'public' : false },callback)
 }
 
