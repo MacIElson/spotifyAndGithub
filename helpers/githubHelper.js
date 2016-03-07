@@ -1,5 +1,6 @@
 var authKeys = require('../authKeys.js');
 var githubapi = require('github-api');
+var request = require('request');
 
 //create new repo
 var createNewRepo = function(githubApiInstance, repoName, callback) {
@@ -44,5 +45,91 @@ var createUpdateFile = function(githubApiInstance, repoName, playlistname, newco
 }
 
 
+//given filename (ie. playlist ID), get all commit SHAs
+var getFileSHAs = function(githubApiInstance, repoName, playlistname, callback) {
+    var user = githubApiInstance.getUser()
+
+    user.show(null, function(err, userfields) {
+        username = userfields.login;
+
+        //GET https://api.github.com/repos/:owner/:repo/commits?path=FILE_PATH
+        var url = 'https://api.github.com/repos/' + username + '/' + repoName + '/commits?path=' + playlistname;
+        var options = {
+          url: url,
+          headers: {            //CHANGE TO SKUMARASENA IF UNAUTHORIZED
+            'User-Agent': username, 
+            'Content-Type': "application/json"
+          }
+
+        };
+
+        request(options, function(err, response, body) {
+            // console.log(response)
+            // var json = JSON.stringify(eval("(" + body + ")"));
+            var commitlist = JSON.parse(body)
+
+
+            shas = [];
+            for (var i in commitlist) {
+                shas.push(commitlist[i].sha)
+                console.log(commitlist[i].sha)
+            }
+
+            if(callback && typeof(callback) === "function") {
+                callback(err, shas) //body)
+            }
+        })
+
+    })
+
+}
+
+
+
+
+//Given filename and commit SHA, get file text
+//playlistname is technically playlist ID
+var getCommitContent = function(githubApiInstance, repoName, playlistname, sha, callback) {
+    var user = githubApiInstance.getUser()
+    console.log(user)
+
+    user.show(null, function(err, userfields) {
+        username = userfields.login;
+        console.log('User login: ' + username)
+
+        //https://raw.githubusercontent.com/USERNAME/REPONAME/SHA/PATH/TO/FILE.EXT
+        //https://raw.githubusercontent.com/skumarasena/spotifyHistory/b469c2385de18eb52174dfdf9dafd5be2b6c825c/503HzKH74uYiK6TJmU868m
+        var link = 'https://raw.githubusercontent.com/' + username + '/' + repoName + '/' + sha + '/' + filename;
+        request.get(link, function(err, response, body) {
+
+            if(callback && typeof(callback) === "function") {
+                callback(err, body)
+            }
+        
+        })
+
+        //https://api.github.com/repos/:owner/:repo/contents/:FILE_PATH?ref=SHA
+        // var url = 'https://api.github.com/repos/' + username + '/' + repoName + '/contents/' + playlistname + '?ref=' + sha;
+        // var options = {
+        //   url: url,
+        //   headers: {            //CHANGE TO SKUMARASENA IF UNAUTHORIZED
+        //     'User-Agent': username
+        //   }
+
+        // };
+
+        // request(options, function(err, response, body) {
+
+        //     if(callback && typeof(callback) === "function") {
+        //         callback(err, body)
+        //     }
+        // })
+
+    })
+}
+
+
 module.exports.createNewRepo = createNewRepo;
 module.exports.createUpdateFile = createUpdateFile;
+module.exports.getCommitContent = getCommitContent;
+module.exports.getFileSHAs = getFileSHAs;

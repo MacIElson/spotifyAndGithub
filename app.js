@@ -49,7 +49,8 @@ app.get('/login', indexRoute.home);
 app.get('/loginGithub', authRoute.ensureAuthenticated, indexRoute.home);
 app.get('/home', authRoute.ensureAuthenticated, indexRoute.stripUserArray, indexRoute.attachSpotifyApi, indexRoute.attachGithubApi, indexRoute.home);
 
-
+app.get('/commit', authRoute.ensureAuthenticated, indexRoute.stripUserArray, indexRoute.attachGithubApi, indexRoute.getCommitContent);
+app.get('/sha', authRoute.ensureAuthenticated, indexRoute.stripUserArray, indexRoute.attachGithubApi, indexRoute.getFileSHAs);
 
 app.get('/getCurrentUser', authRoute.ensureAuthenticated, indexRoute.stripUserArray, indexRoute.attachSpotifyApi, indexRoute.getCurrentUser);
 app.get('/getCurrentUserPlaylists', authRoute.ensureAuthenticated, indexRoute.stripUserArray, indexRoute.attachSpotifyApi, indexRoute.getCurrentUserPlaylists);

@@ -14,7 +14,9 @@ angular.module('myApp.homeView', ['ngRoute'])
     $scope.user = {};
     $scope.playlists = {};
 
+    //names of last backed-up/restored playlists
     $scope.backedUp = null;
+    $scope.restored = null;
 
 	$scope.logout = function (){
     	//$location.path( '/auth/spotify' );
@@ -52,6 +54,12 @@ angular.module('myApp.homeView', ['ngRoute'])
             .error(function(data) {
                 console.log('Error: ' + data);
             });
+    }
+
+    $scope.restorePrevious = function(playlist) {
+        console.log('Restoring previous version of ' + playlist.name + '!')
+        $scope.restored = playlist.name;
+
     }
 
     console.log($scope);
