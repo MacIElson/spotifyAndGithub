@@ -93,7 +93,7 @@ var getFileSHAs = function(githubApiInstance, repoName, playlistname, callback) 
 
 
 
-//Given filename and commit SHA, get file text
+//Given filename and commit SHA, get list of Spotify song IDs
 //playlistname is technically playlist ID
 var getCommitContent = function(githubApiInstance, repoName, playlistname, sha, callback) {
     var user = githubApiInstance.getUser()
@@ -120,29 +120,12 @@ var getCommitContent = function(githubApiInstance, repoName, playlistname, sha, 
                 track_ids.push(tracks[i].track.id);
             }
 
-            // console.log(content.items)
+            
             if(callback && typeof(callback) === "function") {
                 callback(err, track_ids)
             }
         
         })
-
-        //https://api.github.com/repos/:owner/:repo/contents/:FILE_PATH?ref=SHA
-        // var url = 'https://api.github.com/repos/' + username + '/' + repoName + '/contents/' + playlistname + '?ref=' + sha;
-        // var options = {
-        //   url: url,
-        //   headers: {            //CHANGE TO SKUMARASENA IF UNAUTHORIZED
-        //     'User-Agent': username
-        //   }
-
-        // };
-
-        // request(options, function(err, response, body) {
-
-        //     if(callback && typeof(callback) === "function") {
-        //         callback(err, body)
-        //     }
-        // })
 
     })
 }
