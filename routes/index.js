@@ -103,6 +103,38 @@ var backupPlaylistPOST = function(req, res) {
     })
 }
 
+var restorePlaylistPOST = function(req, res) {
+    "expects {name: 'playlistName', id: 'playlistId', sha: 'shaToRestoreTo'}"
+    console.log("restorePlaylistPOST")
+
+    githubHelper.getCommitContent(req.githubApi, "spotifyHistory", req.body.id, req.body.sha, function(err, data) {
+        if(err) { console.log(err); }
+        else { 
+            spotifyHelper.createPlaylist(req.spotifyApi, req.user.spotify.id, req.body.name, function(err,data){
+                console.log(data)
+                spotifyHelper.insertPlaylistTracks(req.spotifyApi,req.user.spotify.id, req.body.id, data, function(err, data){
+                    res.send(data);
+                })
+                
+            })
+        }
+    })
+
+    "get the tracks from that commit"
+
+}
+
+var createPlaylist = function(req, res) {
+    "expects {name: 'playlistName', id: 'plailistId', commit: 'commitToRestoreTo'}"
+    console.log("createPlaylistPOST")
+
+    "get the tracks from that commit"
+    spotifyHelper.createPlaylist(req.spotifyApi, 'moch7', 'testing2', function(err,data){
+        console.log(data.body.id)
+        res.send(data)
+    })
+}
+
 
 
 var getFileSHAsGET = function(req, res) {
@@ -147,3 +179,5 @@ module.exports.getPlaylistTracks = getPlaylistTracksGET;
 module.exports.backupPlaylist = backupPlaylistPOST;
 module.exports.getCommitContent = getCommitContentGET;
 module.exports.getFileSHAs = getFileSHAsGET;
+module.exports.createPlaylist = createPlaylist;
+module.exports.restorePlaylist = restorePlaylistPOST;

@@ -57,6 +57,7 @@ app.get('/getCurrentUserPlaylists', authRoute.ensureAuthenticated, indexRoute.st
 app.get('/getPlaylistTracks', authRoute.ensureAuthenticated, indexRoute.stripUserArray, indexRoute.attachSpotifyApi, indexRoute.getPlaylistTracks);
 
 app.post('/backupPlaylist', authRoute.ensureAuthenticated, indexRoute.stripUserArray, indexRoute.attachSpotifyApi, indexRoute.attachGithubApi, indexRoute.backupPlaylist);
+app.get('/restorePlaylist', authRoute.ensureAuthenticated, indexRoute.stripUserArray, indexRoute.attachSpotifyApi, indexRoute.attachGithubApi, indexRoute.restorePlaylist)
 
 app.get('/auth/spotify', passport.authenticate('spotify', { scope: ['user-read-email', 'user-read-private','playlist-read-private', 'playlist-modify-private','playlist-modify-public']}));
 app.get('/auth/spotify/callback', passport.authenticate('spotify', { successRedirect: '/',
