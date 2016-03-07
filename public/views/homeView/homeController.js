@@ -46,6 +46,7 @@ angular.module('myApp.homeView', ['ngRoute'])
             console.log('Error: ' + data)
         })
 
+    //creates github backup of playlist
     $scope.backupPlaylist = function(playlist) {
         console.log('Backing up playlist ' + playlist.name + '!')
 
@@ -61,6 +62,7 @@ angular.module('myApp.homeView', ['ngRoute'])
             });
     }
 
+    //shows previous version of a given playlist 
     $scope.showPrevious = function(playlist) {
         console.log('Showing previous versions of ' + playlist.id);
 
@@ -79,6 +81,7 @@ angular.module('myApp.homeView', ['ngRoute'])
 
     }
 
+    //Once the "restore this version" button is pressed, sends request...
     $scope.restorePlaylist = function(playlist, commit) {
         console.log('Reverting ' + playlist.name + ' ' + commit)
     }
