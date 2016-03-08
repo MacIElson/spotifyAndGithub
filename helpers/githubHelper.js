@@ -75,14 +75,30 @@ var getFileSHAs = function(githubApiInstance, repoName, playlistname, callback) 
             var commitlist = JSON.parse(body)
 
 
-            shas = [];
-            for (var i in commitlist) {
-                shas.push(commitlist[i].sha)
-                console.log(commitlist[i].sha)
-            }
+            // shas = [];
+            // for (var i in commitlist) {
+            //     shas.push(commitlist[i].sha)
+            //     console.log(commitlist[i].sha)
+            // }
 
+            // if(callback && typeof(callback) === "function") {
+            //     callback(err, shas) //body)
+            // }
+
+            commits = []
+            for (var i in commitlist) {
+                commit = {}
+
+                date = commitlist[i].commit.author.date;
+                sha = commitlist[i].sha;
+
+                commit.date = date;
+                commit.sha = sha;
+                //commit_dates.push(date)
+                commits.push(commit)
+            }
             if(callback && typeof(callback) === "function") {
-                callback(err, shas) //body)
+                callback(err, commits)
             }
         })
 

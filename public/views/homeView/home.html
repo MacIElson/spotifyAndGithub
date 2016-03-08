@@ -15,8 +15,8 @@
 
     <div ng-show="reverting.show">
         Older versions of {{reverting.playlist.name}}
-        <div id = "oldCommit" ng-repeat="commit in reverting.commits"> {{commit}}
-        <button type="submit" ng-click="restorePlaylist(reverting.playlist, commit)"> Restore This Version </button>
+        <div id = "oldCommit" ng-repeat="commit in reverting.commits"> {{commit.sha}}, {{commit.date}}
+        <button type="submit" ng-click="restorePlaylist(reverting.playlist, commit.sha)"> Restore This Version </button>
         </div>
     </div>
 

@@ -83,10 +83,10 @@ angular.module('myApp.homeView', ['ngRoute'])
 
     //Once the "restore this version" button is pressed, sends request...
     //POST request has NOT been tested!
-    $scope.restorePlaylist = function(playlist, commit) {
-        console.log('Reverting ' + playlist.name + ' ' + commit)
+    $scope.restorePlaylist = function(playlist, commitsha) {
+        console.log('Reverting ' + playlist.name + ' ' + commitsha)
 
-        var POSTdata = {name: playlist.name, sha: commit}
+        var POSTdata = {name: playlist.name, sha: commitsha}
 
         $http.post('/restorePlaylist', POSTdata)
             .success(function(data) {
