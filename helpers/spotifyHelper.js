@@ -57,7 +57,7 @@ var getPlaylistTracks = function(spotifyApiInstance, username, playlistId, callb
 
 var insertPlaylistTracks = function(spotifyApiInstance,username, playlistId, tracks, callback) {
 
-	var tracks = trackss.map(function(trackId){
+	var tracks = tracks.map(function(trackId){
 		var base = 'spotify:track:'; 
 		return base.concat(trackId)
 	});
