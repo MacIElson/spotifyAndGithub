@@ -98,9 +98,9 @@ var insertPlaylistTracksHelper = function(spotifyApiInstance,username, playlistI
 			console.log(err)
 			callback(err, null)
 		} else {
-			console.log(len(trackChunks))
-			if (len(trackChunks) === 0) {
-				callback(null, null)
+			console.log(trackChunks.length)
+			if (trackChunks.length === 0) {
+				callback(null, data)
 			} else {
 				insertPlaylistTracksHelper(spotifyApiInstance, username, playlistId, trackChunks, callback);
 			}
