@@ -56,11 +56,16 @@ var getPlaylistTracks = function(spotifyApiInstance, username, playlistId, callb
 }
 
 var insertPlaylistTracks = function(spotifyApiInstance,username, playlistId, tracks, callback) {
-
+	console.log('insertPlaylistTracks called')
+	console.log(tracks)
 	var tracks = tracks.map(function(trackId){
+
 		var base = 'spotify:track:'; 
+		console.log(base.concat(trackId))
 		return base.concat(trackId)
 	});
+	console.log(tracks)
+
 	var len = 100;
 	var trackChunks = [];
 	var i = 0;
@@ -68,24 +73,36 @@ var insertPlaylistTracks = function(spotifyApiInstance,username, playlistId, tra
 
 	while (i < n) {
 		trackChunks.push(tracks.slice(i, i += len));
+		console.log(i)
 	}
 
+	console.log('trackChunks')
+	console.log(trackChunks)
 	insertPlaylistTracksHelper(spotifyApiInstance,username, playlistId, trackChunks, callback);
 
 }
 
 var insertPlaylistTracksHelper = function(spotifyApiInstance,username, playlistId, trackChunks, callback) {
 	chunk = trackChunks.shift();
-	spotifyApi.addTracksToPlaylist(username, playlistId, chunk ,{}, function(err, data) {
+	console.log('chunk')
+	console.log(chunk)
+	console.log('playlistId')
+	console.log(playlistId)
+	console.log('username')
+	console.log(username)
+	spotifyApiInstance.addTracksToPlaylist(username, playlistId, chunk,{}, function(err, data) {
+		console.log("addTracksToPlaylist callback")
+		console.log(data)
 		if (err) {
 			console.log('err in insertPlaylistTracksHelper')
 			console.log(err)
 			callback(err, null)
 		} else {
-			if (len(trackChunks) = 0) {
+			console.log(len(trackChunks))
+			if (len(trackChunks) === 0) {
 				callback(null, null)
 			} else {
-				insertPlaylistTracksHelper(spotifyApiInstance,username, playlistId, trackChunks, callback);
+				insertPlaylistTracksHelper(spotifyApiInstance, username, playlistId, trackChunks, callback);
 			}
 		}
 	})
@@ -99,5 +116,6 @@ var createPlaylist = function(spotifyApiInstance, username, title, callback) {
 module.exports.getNewAccessTokenIfExpired = getNewAccessTokenIfExpired;
 module.exports.getUserPlaylists = getUserPlaylists;
 module.exports.getPlaylistTracks = getPlaylistTracks;
+module.exports.insertPlaylistTracks = insertPlaylistTracks;
 module.exports.getCurrentUser = getCurrentUser;
 module.exports.createPlaylist = createPlaylist;

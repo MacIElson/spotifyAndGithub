@@ -110,9 +110,13 @@ var restorePlaylistPOST = function(req, res) {
     githubHelper.getCommitContent(req.githubApi, "spotifyHistory", req.body.id, req.body.sha, function(err, data) {
         if(err) { console.log(err); }
         else { 
-            spotifyHelper.createPlaylist(req.spotifyApi, req.user.spotify.id, req.body.name, function(err,data){
-                console.log(data)
-                spotifyHelper.insertPlaylistTracks(req.spotifyApi,req.user.spotify.id, req.body.id, data, function(err, data){
+            console.log('tracks to restore')
+            console.log(data)
+            spotifyHelper.createPlaylist(req.spotifyApi, req.user.spotify.id, req.body.name, function(err,data1){
+                console.log(data1)
+                console.log('trying to call insertPlaylistTracks')
+                spotifyHelper.insertPlaylistTracks(req.spotifyApi,req.user.spotify.id, data1.body.id, data, function(err, data){
+                    console.log(data)
                     res.send(data);
                 })
                 
