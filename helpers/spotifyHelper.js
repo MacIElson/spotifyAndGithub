@@ -58,6 +58,11 @@ var getPlaylistTracks = function(spotifyApiInstance, username, playlistId, callb
 var insertPlaylistTracks = function(spotifyApiInstance,username, playlistId, tracks, callback) {
 	console.log('insertPlaylistTracks called')
 	console.log(tracks)
+	
+	if (tracks.length === 0) {
+		return callback(null,null)
+	}
+
 	var tracks = tracks.map(function(trackId){
 
 		var base = 'spotify:track:'; 
@@ -92,7 +97,6 @@ var insertPlaylistTracksHelper = function(spotifyApiInstance,username, playlistI
 	console.log(username)
 	spotifyApiInstance.addTracksToPlaylist(username, playlistId, chunk,{}, function(err, data) {
 		console.log("addTracksToPlaylist callback")
-		console.log(data)
 		if (err) {
 			console.log('err in insertPlaylistTracksHelper')
 			console.log(err)

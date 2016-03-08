@@ -112,7 +112,7 @@ var restorePlaylistPOST = function(req, res) {
         else { 
             console.log('tracks to restore')
             console.log(data)
-            spotifyHelper.createPlaylist(req.spotifyApi, req.user.spotify.id, req.body.name, function(err,data1){
+            spotifyHelper.createPlaylist(req.spotifyApi, req.user.spotify.id, req.body.name + " - " + req.body.date, function(err,data1){
                 console.log(data1)
                 console.log('trying to call insertPlaylistTracks')
                 spotifyHelper.insertPlaylistTracks(req.spotifyApi,req.user.spotify.id, data1.body.id, data, function(err, data){

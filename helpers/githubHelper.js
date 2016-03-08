@@ -109,15 +109,20 @@ var getCommitContent = function(githubApiInstance, repoName, playlistname, sha, 
         request.get(link, function(err, response, body) {
 
             var content = JSON.parse(body);
-
-            console.log(content["tracks"].items);
-            tracks = content["tracks"].items; 
-
+            
             track_ids = [];
-            for(var i in tracks) {
-                console.log('Item ' + i + ' ' + tracks[i].track.name);
-                console.log(tracks[i].track.id);
-                track_ids.push(tracks[i].track.id);
+            if (content.hasOwnProperty('tracks')) {
+                console.log(content["tracks"].items);
+                tracks = content["tracks"].items;
+            
+ 
+
+                
+                for(var i in tracks) {
+                    console.log('Item ' + i + ' ' + tracks[i].track.name);
+                    console.log(tracks[i].track.id);
+                    track_ids.push(tracks[i].track.id);
+                }
             }
 
             
