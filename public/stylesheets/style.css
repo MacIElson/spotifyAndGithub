@@ -24,11 +24,14 @@ md-toolbar h3 {
 /* Sidenav area */
 
 md-list-item > button {
-  width:100%;
+  width:15%;
+  float: left;
   text-align:left !important;
 }
 
   md-list .md-button.selected {
+    width: 50%;
+    max-width:50%;
     color: #03a9f4;
   }
 
