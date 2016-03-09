@@ -6,6 +6,10 @@ html, body {
   padding: 0px;
 }
 
+md-list-item {
+  border: 1px solid #ccc;
+}
+
 /* Toolbar area */
 
 .menu {

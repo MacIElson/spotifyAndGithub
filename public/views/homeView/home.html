@@ -1,27 +1,40 @@
 <!-- This html isinjected into the main page by $routeProvider, it is the only html template used -->
 <md-content>
 <md-toolbar class="md-medium-tall" layout="row">
-    <h3>Spotify and Github</h3>
-    <md-button ng-click="logout()">Logout</md-button>
+<h3>Spotify and Github</h3>
+<md-button ng-click="logout()">Logout</md-button>
 </md-toolbar>
+<md-content layout="row" flex layout-align="center">
+	<md-list>
+		<md-list-item class="md-2-line" ng-repeat="playlist in playlists">
+		    <img ng-src="{{playlist.images[0].url}}" class="md-avatar" alt="{{playlist.name}}">
+			<div class="md-list-item-text" layout="column">
+				<h2>{{ playlist.name }}</h2>
+				<h4>{{ playlist.id }}</h4>
+			</div>
+			<div>
+				<div>
+					<md-button ng-click="backupPlaylist(playlist)"> Back Up Playlist</md-button>
+				</div>
 
+				<div>
+					<md-button type="submit" ng-click="showPrevious(playlist)"> Restore An Older Version</md-button>
+				</div>
+			</div>
+		</md-list-item>
+	</md-list>
 
-    <div id="playlists" class="list-group" ng-repeat="playlist in playlists">
-        {{playlist.name}}, {{playlist.id}} <button type="submit" ng-click="backupPlaylist(playlist)"> Back Up Playlist</button>
-        <button type="submit" ng-click="showPrevious(playlist)"> Restore An Older Version</button>
-    </div>
+<br></br>
 
-    <br></br>
+<div ng-show="reverting.show">
+	Older versions of {{reverting.playlist.name}}
+	<div id = "oldCommit" ng-repeat="commit in reverting.commits"> {{commit.sha}}, {{commit.date}}
+		<button type="submit" ng-click="restorePlaylist(reverting.playlist, commit.sha, commit.date)"> Restore This Version </button>
+	</div>
+</div>
 
-    <div ng-show="reverting.show">
-        Older versions of {{reverting.playlist.name}}
-        <div id = "oldCommit" ng-repeat="commit in reverting.commits"> {{commit.sha}}, {{commit.date}}
-        <button type="submit" ng-click="restorePlaylist(reverting.playlist, commit.sha, commit.date)"> Restore This Version </button>
-        </div>
-    </div>
-
-    <div ng-show="backedUp">
-        Successfully backed up {{backedUp}}!
-    </div>
-
+<div ng-show="backedUp">
+	Successfully backed up {{backedUp}}!
+</div>
+</md-content>
 </md-content>
