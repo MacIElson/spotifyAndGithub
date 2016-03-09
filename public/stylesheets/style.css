@@ -6,8 +6,12 @@ html, body {
   padding: 0px;
 }
 
-md-list-item {
+#mainListItem {
   border: 1px solid #ccc;
+}
+
+#restoreListDiv {
+  align-self: baseline;
 }
 
 md-list-item .md-avatar {
@@ -22,7 +26,6 @@ md-list-item .md-avatar{
     margin-right: 12px;
 }
 
-md
 
 /* Toolbar area */
 
