@@ -1,7 +1,7 @@
 <!-- This html isinjected into the main page by $routeProvider, it is the only html template used -->
 <md-content>
 <md-toolbar class="md-medium-tall" layout="row">
-<h3>Spotify and Github</h3>
+<h2>Spotify and Github</h2>
 <md-button ng-click="logout()">Logout</md-button>
 </md-toolbar>
 <md-content layout="row" flex layout-align="center">
@@ -10,7 +10,6 @@
 		    <img ng-src="{{playlist.images[0].url}}" class="md-avatar" alt="{{playlist.name}}">
 			<div class="md-list-item-text" layout="column">
 				<h2>{{ playlist.name }}</h2>
-				<h4>{{ playlist.id }}</h4>
 			</div>
 			<div>
 				<div>

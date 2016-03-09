@@ -10,6 +10,20 @@ md-list-item {
   border: 1px solid #ccc;
 }
 
+md-list-item .md-avatar {
+    width: 80px;
+    height: 80px;
+}
+
+md-list-item .md-avatar{
+    margin-top: 12px;
+    margin-bottom: 12px;
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
+md
+
 /* Toolbar area */
 
 .menu {
@@ -21,7 +35,7 @@ md-list-item {
 }
 
 
-md-toolbar h3 {
+md-toolbar h2 {
   margin: auto;
   font-weight: 500;
 }
