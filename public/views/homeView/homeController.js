@@ -7,7 +7,7 @@ angular.module('myApp.homeView', ['ngRoute'])
   });
 }])
 
-.controller('homeController', ['$scope','$window', '$http', function($scope,$window, $http) {
+.controller('homeController', ['$scope','$window', '$http', '$mdToast', function($scope,$window, $http, $mdToast) {
 	console.log("homeController loaded");
 
 
@@ -27,6 +27,8 @@ angular.module('myApp.homeView', ['ngRoute'])
     	//$location.path( '/auth/spotify' );
     	$window.location.href = '/auth/logout';
 	};
+
+
 
     $http.get('/getCurrentUser')
         .success(function(data) {
@@ -90,6 +92,10 @@ angular.module('myApp.homeView', ['ngRoute'])
 
         $http.post('/restorePlaylist', POSTdata)
             .success(function(data) {
+                $mdToast.show($mdToast.simple()
+                    .textContent('Successfully restored ' + playlist.name)
+                    .hideDelay(3000)
+                );
                 console.log('Successfully restored ' + playlist.name);
             })
             .error(function(data) {
