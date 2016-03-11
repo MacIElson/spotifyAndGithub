@@ -1,4 +1,3 @@
-var authKeys = require('../authKeys.js');
 var SpotifyWebApi = require('spotify-web-api-node');
 var request = require('request');
 
