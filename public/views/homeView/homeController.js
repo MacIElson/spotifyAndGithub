@@ -57,10 +57,17 @@ angular.module('myApp.homeView', ['ngRoute'])
             .success(function(data) {
                 console.log("playlist save successfull");
                 console.log(data);
-                $scope.backedUp = playlist.name;
+                $mdToast.show($mdToast.simple()
+                    .textContent('Successfully backed up ' + playlist.name)
+                    .hideDelay(3000)
+                );
             })
             .error(function(data) {
                 console.log('Error: ' + data);
+                $mdToast.show($mdToast.simple()
+                    .textContent('Failed to backed up ' + playlist.name)
+                    .hideDelay(3000)
+                );
             });
     }
 
@@ -99,6 +106,10 @@ angular.module('myApp.homeView', ['ngRoute'])
                 console.log('Successfully restored ' + playlist.name);
             })
             .error(function(data) {
+                $mdToast.show($mdToast.simple()
+                    .textContent('Failed to restore ' + playlist.name)
+                    .hideDelay(3000)
+                );
                 console.log('Error: ' + data)
             })
     }
