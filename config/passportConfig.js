@@ -2,7 +2,6 @@
 var SpotifyStrategy = require('passport-spotify').Strategy;
 
 var User = require('../models/userModel.js');
-var authKeys = require('../authKeys.js');
 
 module.exports = function(passport) {
 
@@ -19,9 +18,9 @@ module.exports = function(passport) {
     });
 
     passport.use(new SpotifyStrategy({
-        clientID: authKeys.SPOTIFY_CLIENT_ID,
-        clientSecret: authKeys.SPOTIFY_CLIENT_SECRET,
-        callbackURL: authKeys.SPOTIFY_CALLBACK_URL
+        clientID: process.env.SPOTIFY_CLIENT_ID,
+        clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+        callbackURL: process.env.SPOTIFY_CALLBACK_URL
       },
       function(accessToken, refreshToken, params , profile, done) {
         console.log('accessTokenPassport')
