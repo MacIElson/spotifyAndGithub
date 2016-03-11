@@ -3,19 +3,18 @@ var express = require('express');
 var passport = require('passport');
 var async = require('async');
 var path = require('path');
-var User = require('../models/userModel.js');
 var router = express.Router();
-var authKeys = require('../authKeys.js');
-var spotifyHelper = require('../helpers/spotifyHelper.js');
-var githubHelper = require('../helpers/githubHelper.js');
 var SpotifyWebApi = require('spotify-web-api-node');
 var GithubApi = require('github-api');
 var request = require('request');
 var fs = require('fs');
 var bodyParser = require('body-parser');
-
 var http = require("http");
 var url = require("url");
+
+var User = require('../models/userModel.js');
+var spotifyHelper = require('../helpers/spotifyHelper.js');
+var githubHelper = require('../helpers/githubHelper.js');
 
 module.exports = router;
 
@@ -47,9 +46,9 @@ var attachGithubApiPASSTHROUGH = function(req, res, next) {
 var attachSpotifyApiPASSTHROUGH = function(req, res, next) {
 
     var spotifyApi = new SpotifyWebApi({
-      clientId : authKeys.SPOTIFY_CLIENT_ID,
-      clientSecret : authKeys.SPOTIFY_CLIENT_SECRET,
-      redirectUri : authKeys.SPOTIFY_CALLBACK_URL
+      clientId : process.env.SPOTIFY_CLIENT_ID,
+      clientSecret : process.env.SPOTIFY_CLIENT_SECRET,
+      redirectUri : process.env.SPOTIFY_CALLBACK_URL
     });
     spotifyApi.setAccessToken(req.user.spotify.accessToken)
     spotifyApi.setRefreshToken(req.user.spotify.refreshToken)

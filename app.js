@@ -11,8 +11,20 @@ var favicon = require('serve-favicon');
 var session = require('express-session');
 var passport = require('passport');
 var SpotifyWebApi = require('spotify-web-api-node');
-var authKeys = require('./authKeys.js');
 var app = express();
+
+if (process.env.NODE_ENV === 'production') {
+
+} else {
+	var authKeys = require('./authKeys.js');
+	process.env['SPOTIFY_CLIENT_ID'] = authKeys.SPOTIFY_CLIENT_ID;
+	process.env['SPOTIFY_CLIENT_SECRET'] = authKeys.SPOTIFY_CLIENT_SECRET;
+	process.env['SPOTIFY_CALLBACK_URL'] = authKeys.SPOTIFY_CALLBACK_URL;
+
+	process.env['GITHUB_CLIENT_ID'] = authKeys.GITHUB_CLIENT_ID;
+	process.env['GITHUB_CLIENT_SECRET'] = authKeys.GITHUB_CLIENT_SECRET;
+	process.env['GITHUB_CALLBACK_URL'] = authKeys.GITHUB_CALLBACK_URL;
+}
 
 require('./config/passportConfig')(passport);
 app.use(session({ secret: 'this is not a secret ;)',

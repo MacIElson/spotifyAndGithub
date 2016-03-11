@@ -1,4 +1,3 @@
-var authKeys = require('../authKeys.js');
 var githubapi = require('github-api');
 var request = require('request');
 

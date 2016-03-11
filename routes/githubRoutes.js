@@ -4,14 +4,13 @@ var passport = require('passport');
 var async = require('async');
 var path = require('path');
 var User = require('../models/userModel.js');
-var authKeys = require('../authKeys.js');
-var authkeys = require('../authKeys.js');
 var querystring = require('querystring');
 var request = require('request');
 var githubHelper = require('../helpers/githubHelper.js');
 var GithubApi = require('github-api');
 
 var router = express.Router();
+
 var authroutes = {};
 
 var generateRandomString = function(length) {
@@ -35,13 +34,13 @@ authroutes.getGithubAuth = function(req, res) {
 	res.cookie(stateKey, state);
 
 	// your application requests authorization
-	console.log(authkeys.GITHUB_CLIENT_ID);
+	console.log(process.env.GITHUB_CLIENT_ID);
 	var scope = 'user repo';
 	res.redirect('https://github.com/login/oauth/authorize?' +
 		querystring.stringify({
-			client_id: authkeys.GITHUB_CLIENT_ID,
+			client_id: process.env.GITHUB_CLIENT_ID,
 			scope: scope,
-			redirect_uri: authkeys.GITHUB_CALLBACK_URL,
+			redirect_uri: process.env.GITHUB_CALLBACK_URL,
 			state: state
 		}));
 };
@@ -65,8 +64,8 @@ authroutes.getGithubCallback = function(req, res) {
 			url: 'https://github.com/login/oauth/access_token',
 			form: {
 				code: code,
-				client_id: authkeys.GITHUB_CLIENT_ID,
-				client_secret: authkeys.GITHUB_CLIENT_SECRET,
+				client_id: process.env.GITHUB_CLIENT_ID,
+				client_secret: process.env.GITHUB_CLIENT_SECRET,
 			    // redirect_uri: 'http://localhost:3000/auth/github/callback/token',
 			    state: state
 			},
