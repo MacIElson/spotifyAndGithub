@@ -87,6 +87,7 @@ var getPlaylistTracksGET = function(req, res) {
 }
 
 var backupPlaylistPOST = function(req, res) {
+    // Remove log statements from master
     console.log("backupPlaylistPOST")
     spotifyHelper.getPlaylistTracks(req.spotifyApi, req.body.user, req.body.id, function(err, tracks){
         githubHelper.createUpdateFile(req.githubApi, "spotifyHistory", req.body.id, JSON.stringify(tracks, null, 4), "backup!", function(err) {
@@ -170,6 +171,16 @@ var getCommitContentGET = function(req, res) {
 
     
 }
+
+// In order to avoid this series of exports you can simple initiate
+// a dictonary i.e. routes = {} and have all functions be part of that 
+// object, as follows:
+
+// routes.routeLoggedIn = function(req, res){...} etc.
+
+// And in the end of your file, simply do:
+
+// module.exports=routes
 
 module.exports.routeLoggedIn = routeLoggedIn;
 module.exports.stripUserArray = stripUserArray;
