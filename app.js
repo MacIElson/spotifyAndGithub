@@ -82,6 +82,7 @@ app.get('/auth/github/callback', githubRoute.getGithubCallback)
 app.get('/auth/user', authRoute.ensureAuthenticated, authRoute.user)
 app.get('/auth/logout', authRoute.logout);
 
+//A common practice with angular apps is to send the html page on *. So that directly heading to an address doesn't leave the app 
 
 var PORT = process.env.PORT || 3000;
 app.listen(PORT, function(err) {
